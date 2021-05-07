@@ -45,9 +45,8 @@ Enabling the parallel execution of multiple circuits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Where supported by the backend of the Amazon Braket service, the remote device can be used to execute multiple
-quantum circuits in parallel. To unlock this feature, make sure `tape mode <https://pennylane.readthedocs.io/en/stable/code/qml_tape.html>`_ is enabled in PennyLane, and then instantiate the device using the ``parallel=True`` argument:
+quantum circuits in parallel. To unlock this feature, instantiate the device using the ``parallel=True`` argument:
 
->>> qml.enable_tape()
 >>> remote_device = qml.device('braket.aws.qubit', [... ,] parallel=True)
 
 The details of the parallelization scheme depend on the PennyLane version you use, as well as your AWS account specifications.
@@ -67,6 +66,16 @@ You can set a timeout by using the ``poll_timeout_seconds`` argument;
 the device will retry circuits that do not complete within the timeout.
 A timeout of 30 to 60 seconds is recommended for circuits with fewer than 25 qubits.
 
+Device options
+~~~~~~~~~~~~~~
+
+The default value of ``shots`` is ``None``. In this case:
+
+- If the device ARN points to a simulator, the device runs in analytic mode (calculations will be
+  exact).
+- If the device ARN points to a QPU, a default nonzero number of shots will be fixed.
+
+Analytic-mode is not available for QPUs and setting ``shots=0`` will raise an error.
 
 Supported operations
 ~~~~~~~~~~~~~~~~~~~~
